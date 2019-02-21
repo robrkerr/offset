@@ -8,8 +8,12 @@ const Container = styled.div`
   height: 3rem;
   width: 100%;
   margin: 4rem 0;
-  cursor: pointer;
+  ${(props) => props.adjustable && 'cursor: grab;'}
   user-select: none;
+
+  &:active {
+    ${(props) => props.adjustable && 'cursor: grabbing;'}
+  }
 `
 
 const getMousePosX = (evt) => {
@@ -31,7 +35,7 @@ const Timeline = (props) => {
   const offset = props.offset || 0
   const [ dragStartX, setDragStartX ] = useState(undefined)
   return (
-    <Container
+    <Container adjustable={!!props.setOffset}
       onMouseDown={(e) => onMouseDown(e, setDragStartX)}
       onMouseMove={(e) => onMouseMove(e, setDragStartX, dragStartX, offset, props.setOffset)}
       onMouseUp={(e) => onMouseUp(e, setDragStartX)}

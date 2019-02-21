@@ -18,10 +18,6 @@ const Text = styled.div`
 const Container = styled.div`
   width: 4.17%;
   height: 100%;
-
-  &:hover > ${Box} {
-    opacity: ${(props) => props.opacity ? Math.min(props.opacity + 0.2, 1.0) : 1};
-  }
 `
 
 const Hour = (props) => {

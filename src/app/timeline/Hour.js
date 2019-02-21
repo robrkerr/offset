@@ -1,19 +1,47 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Container = styled.div`
-  width: 2rem;
-  height: 100%;
+const Box = styled.div`
+  width: 100%;
+  height: calc(100% - 1rem);
   opacity: ${(props) => props.opacity || 1};
-  background: ${(props) => props.colour || 'blue'};
+  background: ${(props) => props.colour || 'steelblue'};
+`
 
-  &:hover {
-    opacity: ${(props) => props.opacity ? Math.max(props.opacity + 0.2, 1.0) : 1};
+const Text = styled.div`
+  width: 100%;
+  height: 1rem;
+  font-size: 0.55rem;
+  text-align: left;
+`
+
+const Container = styled.div`
+  width: 4.17%;
+  height: 100%;
+
+  &:hover > ${Box} {
+    opacity: ${(props) => props.opacity ? Math.min(props.opacity + 0.2, 1.0) : 1};
   }
 `
 
-const Hour = (props) => (
-  <Container opacity={props.opacity} colour="steelblue"></Container>
-)
+const Hour = (props) => {
+  return (
+    <Container opacity={props.opacity}>
+      <Text>
+        {(props.hour === 0)
+          ? '12AM'
+          : ((props.hour === 12)
+            ? '12PM'
+            : ((props.hour > 12)
+              ? `${props.hour - 12}PM`
+              : `${props.hour}AM`
+            )
+          )
+        }
+      </Text>
+      <Box opacity={props.opacity}></Box>
+    </Container>
+  )
+}
 
 export default Hour

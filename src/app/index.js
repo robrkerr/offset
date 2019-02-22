@@ -1,15 +1,19 @@
-import React from 'react'
-// import React, { useState } from 'react'
+import React, { useState } from 'react'
 import { useUrlState } from 'with-url-state'
 import Main from './Main'
 import { hours } from '../utils/hours'
+import { useInterval } from '../utils/hooks'
 
-const now = new Date()
-const defaultOffset = -now.getTimezoneOffset() / 60
+const defaultOffset = -(new Date()).getTimezoneOffset() / 60
 const defaultOfficeHours = hours.map((hour) => hour >= 9 && hour < 17)
-const myTimeOfDay = now.getHours() + now.getMinutes() / 60
+
+const getTime = () => {
+  const now = new Date()
+  return now.getHours() + now.getMinutes() / 60
+}
 
 const App = () => {
+  // set up url state
   const [ urlState, setUrlState ] = useUrlState({})
   const themOffset = urlState.themOffset || defaultOffset
   const setThemOffset = (offset) => (offset !== undefined) && setUrlState({ ...urlState, themOffset: offset })
@@ -19,7 +23,11 @@ const App = () => {
   const setThemName = (name) => (name !== undefined) && setUrlState({ ...urlState, themName: name })
   const meName = urlState.meName || 'me'
   const setMeName = (name) => (name !== undefined) && setUrlState({ ...urlState, meName: name })
+  // update the time every 5mins
+  const [ currentTime, setCurrentTime ] = useState(getTime())
+  useInterval(() => setCurrentTime(getTime()), 5 * 60 * 1000)
   const mainProps = {
+    currentTime,
     them: {
       name: themName,
       utcOffset: themOffset,
@@ -35,7 +43,7 @@ const App = () => {
       officeHours: defaultOfficeHours,
     }
   }
-  return <Main {...mainProps} currentTime={myTimeOfDay} />
+  return <Main {...mainProps} />
 }
 
 export default App

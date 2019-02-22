@@ -10,11 +10,14 @@ Soon:
 - [ ] Publish to Github repo
 - [ ] Make work with fractions of hours as offsets
 - [ ] Add button to flip me/them
-- [ ] Add interval to keep time updated
+- [x] Add interval to keep time updated
 - [ ] Make tooltips/modals look nicer
-- [ ] Allow editing of office hours
 
 Later:
+- [ ] Allow editing of office hours
+- [ ] Allow other hour configurations: day-light, awake, after-work
+- [ ] Explore a vertical, mobile-friendly version
+- [ ] Set meeting time (utc) and duration (and display dates)
 - [ ] Use code splitting to import moment (or moment-timezones) to set/display offset by name
 - [ ] Allow choosing a different time of year with locations
 - [ ] Use local storage to remember recent states (maybe only on exit, or on timer, ...)

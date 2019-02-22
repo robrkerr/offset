@@ -8,15 +8,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Soon:
 - [ ] Publish to Github repo
-- [ ] Make work with fractions of hours as offsets
+- [x] Make work with fractions of hours as offsets
 - [ ] Add button to flip me/them
 - [x] Add interval to keep time updated
 - [ ] Make tooltips/modals look nicer
-
-Later:
 - [ ] Allow editing of office hours
 - [ ] Allow other hour configurations: day-light, awake, after-work
 - [ ] Explore a vertical, mobile-friendly version
+
+Later:
 - [ ] Set meeting time (utc) and duration (and display dates)
 - [ ] Use code splitting to import moment (or moment-timezones) to set/display offset by name
 - [ ] Allow choosing a different time of year with locations

@@ -10,6 +10,7 @@ const Container = styled.div`
   margin: 4rem 0;
   ${(props) => props.adjustable && 'cursor: grab;'}
   user-select: none;
+  overflow-x: hidden;
 
   &:active {
     ${(props) => props.adjustable && 'cursor: grabbing;'}
@@ -25,7 +26,7 @@ const onMouseDown = (evt, setPosX) => setPosX(getMousePosX(evt))
 const onMouseUp = (_, setPosX) => setPosX(undefined)
 const onMouseMove = (evt, setDragStartX, startPosX, offset, setOffset) => {
   if (!setOffset || (startPosX === undefined)) { return }
-  const hoursToShift = Math.round(24 * (getMousePosX(evt) - startPosX))
+  const hoursToShift = Math.round(4 * 24 * (getMousePosX(evt) - startPosX)) / 4
   if (hoursToShift === 0) { return }
   setOffset(offset + hoursToShift)
   setDragStartX(startPosX + hoursToShift / 24)
@@ -33,6 +34,8 @@ const onMouseMove = (evt, setDragStartX, startPosX, offset, setOffset) => {
 
 const Timeline = (props) => {
   const offset = props.offset || 0
+  const wholeOffset = Math.ceil(offset)
+  const fractionOffset = offset - wholeOffset
   const [ dragStartX, setDragStartX ] = useState(undefined)
   return (
     <Container adjustable={!!props.setOffset}
@@ -41,11 +44,22 @@ const Timeline = (props) => {
       onMouseUp={(e) => onMouseUp(e, setDragStartX)}
     >
       {hours.map((hour, i) => {
-        const shiftedHour = (hour - offset + 24) % 24
+        const shiftedHour = (hour - wholeOffset + 24) % 24
         return (
-          <Hour key={i} hour={shiftedHour} opacity={props.officeHours[shiftedHour] ? 0.8 : 0.4} />
+          <Hour
+            key={i}
+            hour={((i === 0) && (fractionOffset !== 0)) ? undefined : shiftedHour}
+            opacity={props.officeHours[shiftedHour] ? 0.8 : 0.4}
+            adjustment={fractionOffset}
+          />
         )
       })}
+      {(fractionOffset !== 0) && (
+        <Hour
+          opacity={props.officeHours[(hours[0] - wholeOffset + 24) % 24] ? 0.8 : 0.4}
+          adjustment={fractionOffset}
+        />
+      )}
     </Container>
   )
 }

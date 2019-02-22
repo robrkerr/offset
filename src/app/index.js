@@ -7,9 +7,8 @@ import { useInterval } from '../utils/hooks'
 const defaultOffset = -(new Date()).getTimezoneOffset() / 60
 const defaultOfficeHours = hours.map((hour) => hour >= 9 && hour < 17)
 
-const getTime = () => {
-  const now = new Date()
-  return now.getHours() + now.getMinutes() / 60
+const getTime = (time, myOffset) => {
+  return time.getHours() + (myOffset - defaultOffset) + time.getMinutes() / 60
 }
 
 const App = () => {
@@ -24,10 +23,10 @@ const App = () => {
   const meName = urlState.meName || 'me'
   const setMeName = (name) => (name !== undefined) && setUrlState({ ...urlState, meName: name })
   // update the time every 5mins
-  const [ currentTime, setCurrentTime ] = useState(getTime())
-  useInterval(() => setCurrentTime(getTime()), 5 * 60 * 1000)
+  const [ currentTime, setCurrentTime ] = useState(new Date())
+  useInterval(() => setCurrentTime(new Date()), 5 * 60 * 1000)
   const mainProps = {
-    currentTime,
+    currentTime: getTime(currentTime, meOffset),
     them: {
       name: themName,
       utcOffset: themOffset,

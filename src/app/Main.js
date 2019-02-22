@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Timeline from './timeline/Timeline'
 import Party from './party/Party'
 import PartyModal from './party/PartyModal'
+import { normaliseOffset } from '../utils/hours'
 
 const MainContainer = styled.div`
   position: relative;
@@ -56,7 +57,7 @@ const Main = (props) => {
         officeHours={props.them.officeHours}
         offset={props.me.utcOffset - props.them.utcOffset}
         setOffset={(offset) => {
-          const newOffset = (36 + props.me.utcOffset - offset) % 24 - 12
+          const newOffset = normaliseOffset(props.me.utcOffset - offset)
           props.them.setUtcOffset(newOffset)
         }}
       />

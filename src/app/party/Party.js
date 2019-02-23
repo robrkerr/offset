@@ -7,6 +7,7 @@ const Container = styled.div`
 `
 
 const Heading = styled.div`
+  font-size: 1.4rem;
 `
 
 const Timezone = styled.div`

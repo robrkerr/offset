@@ -13,6 +13,10 @@ const Text = styled.div`
   height: 1rem;
   font-size: 0.55rem;
   text-align: left;
+
+  @media (max-width: 700px) {
+    ${(props) => props.minor && 'visibility: hidden;'}
+  }
 `
 
 const Container = styled.div`
@@ -23,27 +27,25 @@ const Container = styled.div`
   flex-shrink: 0;
 `
 
-const Hour = (props) => {
-  return (
-    <Container opacity={props.opacity} adjustment={props.adjustment}>
-      <Text>
-        {(props.hour === undefined)
-          ? ''
-          : ((props.hour === 0)
-            ? '12AM'
-            : ((props.hour === 12)
-              ? '12PM'
-              : ((props.hour > 12)
-                ? `${props.hour - 12}PM`
-                : `${props.hour}AM`
-              )
+const Hour = (props) => (
+  <Container opacity={props.opacity} adjustment={props.adjustment}>
+    <Text minor={(props.hour % 3) !== 0}>
+      {(props.hour === undefined)
+        ? ''
+        : ((props.hour === 0)
+          ? '12AM'
+          : ((props.hour === 12)
+            ? '12PM'
+            : ((props.hour > 12)
+              ? `${props.hour - 12}PM`
+              : `${props.hour}AM`
             )
           )
-        }
-      </Text>
-      <Box opacity={props.opacity}></Box>
-    </Container>
-  )
-}
+        )
+      }
+    </Text>
+    <Box opacity={props.opacity}></Box>
+  </Container>
+)
 
 export default Hour

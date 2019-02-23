@@ -1,22 +1,33 @@
 import React from 'react'
 import styled from 'styled-components'
+import { colours } from '../../utils/styles'
 
 const Box = styled.div`
   width: 100%;
   height: calc(100% - 1rem);
   opacity: ${(props) => props.opacity || 1};
-  background: ${(props) => props.colour || 'steelblue'};
+  background: ${(props) => props.colour || colours.primary};
 `
 
-const Text = styled.div`
+const TextContainer = styled.div`
   width: 100%;
-  height: 1rem;
-  font-size: 0.55rem;
+  height: 1.1rem;
   text-align: left;
+  font-size: 0.75rem;
+  white-space: nowrap;
 
   @media (max-width: 700px) {
     ${(props) => props.minor && 'visibility: hidden;'}
   }
+`
+
+const TextNumber = styled.span`
+  display: inline-block;
+`
+
+const TextSuffix = styled.span`
+  display: inline-block;
+  font-size: 0.55rem;
 `
 
 const Container = styled.div`
@@ -27,25 +38,30 @@ const Container = styled.div`
   flex-shrink: 0;
 `
 
-const Hour = (props) => (
-  <Container opacity={props.opacity} adjustment={props.adjustment}>
-    <Text minor={(props.hour % 3) !== 0}>
-      {(props.hour === undefined)
-        ? ''
-        : ((props.hour === 0)
-          ? '12AM'
-          : ((props.hour === 12)
-            ? '12PM'
-            : ((props.hour > 12)
-              ? `${props.hour - 12}PM`
-              : `${props.hour}AM`
-            )
-          )
-        )
-      }
-    </Text>
-    <Box opacity={props.opacity}></Box>
-  </Container>
-)
+const formatHour = (hour) => {
+  if (hour === 0) {
+    return { number: '12', suffix: 'AM' }
+  } else if (hour === 12) {
+    return { number: '12', suffix: 'PM' }
+  } else if (hour > 12) {
+    return { number: `${hour - 12}`, suffix: 'PM' }
+  } else if (hour < 12) {
+    return { number: `${hour}`, suffix: 'AM' }
+  }
+  return {}
+}
+
+const Hour = (props) => {
+  const { number: hourNumber, suffix: hourSuffix } = formatHour(props.hour)
+  return (
+    <Container opacity={props.opacity} adjustment={props.adjustment}>
+      <TextContainer minor={(props.hour % 3) !== 0}>
+        <TextNumber>{hourNumber}</TextNumber>
+        <TextSuffix>{hourSuffix}</TextSuffix>
+      </TextContainer>
+      <Box opacity={props.opacity}></Box>
+    </Container>
+  )
+}
 
 export default Hour

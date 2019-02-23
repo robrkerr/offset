@@ -5,7 +5,7 @@ import { hours } from '../../utils/hours'
 
 const Container = styled.div`
   display: flex;
-  height: 3rem;
+  height: 4rem;
   width: 100%;
   margin: 4rem 0;
   ${(props) => props.adjustable && 'cursor: grab;'}
@@ -47,7 +47,7 @@ const Timeline = (props) => {
         const shiftedHour = (hour - wholeOffset + 24) % 24
         return (
           <Hour
-            key={i}
+            key={shiftedHour}
             hour={((i === 0) && (fractionOffset !== 0)) ? undefined : shiftedHour}
             opacity={props.officeHours[shiftedHour] ? 0.8 : 0.4}
             adjustment={fractionOffset}

@@ -4,6 +4,7 @@ import Timeline from './timeline/Timeline'
 import Party from './party/Party'
 import PartyModal from './party/PartyModal'
 import { normaliseOffset } from '../utils/hours'
+import { colours } from '../utils/styles'
 
 const MainContainer = styled.div`
   position: relative;
@@ -14,7 +15,7 @@ const MainContainer = styled.div`
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: ${colours.light};
   max-width: 800px;
   width: 100%;
   margin: 0 auto;
@@ -22,7 +23,7 @@ const MainContainer = styled.div`
 `
 
 const NowLine = styled.div`
-  border-left: firebrick solid 2px;
+  border-left: ${colours.currentTime} solid 2px;
   opacity: 0.4;
   height: 100%;
   position: absolute;
@@ -50,14 +51,16 @@ const Main = (props) => {
           name={props.them.name}
           offset={props.them.utcOffset}
           onEditName={(name) => props.them.setName(name)}
-          onEditOffset={(offset) => props.them.setUtcOffset(offset)}
+          onEditOffset={(offset) => {
+            props.them.setUtcOffset(normaliseOffset(offset))
+          }}
         />
       )}
       <Timeline
         officeHours={props.them.officeHours}
         offset={props.me.utcOffset - props.them.utcOffset}
-        setOffset={(offset) => {
-          const newOffset = normaliseOffset(props.me.utcOffset - offset)
+        setOffset={(offsetDiff) => {
+          const newOffset = normaliseOffset(props.me.utcOffset - offsetDiff)
           props.them.setUtcOffset(newOffset)
         }}
       />
@@ -71,7 +74,9 @@ const Main = (props) => {
           name={props.me.name}
           offset={props.me.utcOffset}
           onEditName={(name) => props.me.setName(name)}
-          onEditOffset={(offset) => props.me.setUtcOffset(offset)}
+          onEditOffset={(offset) => {
+            props.me.setUtcOffset(normaliseOffset(offset))
+          }}
         />
       )}
       <Timeline

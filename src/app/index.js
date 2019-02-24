@@ -25,8 +25,19 @@ const App = () => {
   // update the time every 5mins
   const [ currentTime, setCurrentTime ] = useState(new Date())
   useInterval(() => setCurrentTime(new Date()), 5 * 60 * 1000)
+  // 
+  const switchPerspectives = () => {
+    setUrlState({
+      themOffset: meOffset,
+      meOffset: themOffset,
+      themName: meName,
+      meName: themName,
+    })
+  }
+  //
   const mainProps = {
     currentTime: getTime(currentTime, meOffset),
+    switchPerspectives,
     them: {
       name: themName,
       utcOffset: themOffset,

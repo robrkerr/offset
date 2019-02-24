@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
 import Timeline from './timeline/Timeline'
 import Party from './party/Party'
 import PartyModal from './party/PartyModal'
@@ -30,6 +32,16 @@ const NowLine = styled.div`
   left: ${(props) => props.position * 100}%;
   top: 0;
   width: 1rem;
+`
+
+const SwitchContainer = styled.div`
+  width: 100%;
+  text-align: right;
+  padding: 0.5rem 2rem;
+
+  & > svg {
+    cursor: pointer;
+  }
 `
 
 const Main = (props) => {
@@ -64,6 +76,13 @@ const Main = (props) => {
           props.them.setUtcOffset(newOffset)
         }}
       />
+      <SwitchContainer>
+        <FontAwesomeIcon
+          rotation="90"
+          icon={faExchangeAlt}
+          onClick={props.switchPerspectives}
+        />
+      </SwitchContainer>      
       <Party
         name={props.me.name}
         offset={props.me.utcOffset}

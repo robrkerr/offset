@@ -7,7 +7,7 @@ const Container = styled.div`
   display: flex;
   height: 4rem;
   width: 100%;
-  margin: 4rem 0;
+  margin: 3rem 0;
   ${(props) => props.adjustable && 'cursor: grab;'}
   user-select: none;
   overflow-x: hidden;

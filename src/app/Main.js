@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
-import Timeline from './timeline/Timeline'
+import Timeline, { Container as TimelineContainer } from './timeline/Timeline'
 import Party from './party/Party'
 import PartyModal from './party/PartyModal'
 import { normaliseOffset } from '../utils/hours'
@@ -16,12 +16,17 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: ${colours.light};
   max-width: 800px;
   width: 100%;
   margin: 0 auto;
   overflow: visible;
+
+  @media (min-height: 500px) {
+    & > ${TimelineContainer} {
+      margin-bottom: 4rem;
+    }
+  }
 `
 
 const NowLine = styled.div`
@@ -35,12 +40,22 @@ const NowLine = styled.div`
 `
 
 const SwitchContainer = styled.div`
+  position: relative;
   width: 100%;
   text-align: right;
-  padding: 0.5rem 2rem;
+  height: 0;
 
   & > svg {
     cursor: pointer;
+    position: absolute;
+    right: 1.5rem;
+    top: 0.5rem;
+  }
+
+  @media (min-height: 500px) {
+    & > svg {
+      top: -1rem;
+    }
   }
 `
 
@@ -78,7 +93,7 @@ const Main = (props) => {
       />
       <SwitchContainer>
         <FontAwesomeIcon
-          rotation="90"
+          rotation={90}
           icon={faExchangeAlt}
           onClick={props.switchPerspectives}
         />

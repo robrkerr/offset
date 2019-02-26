@@ -8,7 +8,7 @@ const Container = styled.div`
 
 const Heading = styled.div`
   font-size: 1.4rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0 0.2rem;
 `
 
 const Timezone = styled.div`

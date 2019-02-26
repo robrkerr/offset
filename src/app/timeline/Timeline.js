@@ -3,30 +3,33 @@ import styled from 'styled-components'
 import Hour from './Hour'
 import { hours } from '../../utils/hours'
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   height: 4rem;
   width: 100%;
-  margin: 3rem 0;
+  margin: 1rem 0;
   ${(props) => props.adjustable && 'cursor: grab;'}
   user-select: none;
   overflow-x: hidden;
+  overflow-y: hidden;
+  flex-shrink: 0;
 
   &:active {
     ${(props) => props.adjustable && 'cursor: grabbing;'}
   }
 `
 
-const getMousePosX = (evt) => {
+const getDragPosX = (evt) => {
+  const xPos = evt.clientX || evt.touches[0].clientX
   const elementRect = evt.currentTarget.getBoundingClientRect()
-  return (evt.clientX - elementRect.x) / elementRect.width
+  return (xPos - elementRect.x) / elementRect.width
 }
 
-const onMouseDown = (evt, setPosX) => setPosX(getMousePosX(evt))
-const onMouseUp = (_, setPosX) => setPosX(undefined)
-const onMouseMove = (evt, setDragStartX, startPosX, offset, setOffset) => {
+const onPanStart = (evt, setPosX) => setPosX(getDragPosX(evt))
+const onPanEnd = (_, setPosX) => setPosX(undefined)
+const onPanMove = (evt, setDragStartX, startPosX, offset, setOffset) => {
   if (!setOffset || (startPosX === undefined)) { return }
-  const hoursToShift = Math.round(4 * 24 * (getMousePosX(evt) - startPosX)) / 4
+  const hoursToShift = Math.round(4 * 24 * (getDragPosX(evt) - startPosX)) / 4
   if (hoursToShift === 0) { return }
   setOffset(offset + hoursToShift)
   setDragStartX(startPosX + hoursToShift / 24)
@@ -39,9 +42,12 @@ const Timeline = (props) => {
   const [ dragStartX, setDragStartX ] = useState(undefined)
   return (
     <Container adjustable={!!props.setOffset}
-      onMouseDown={(e) => onMouseDown(e, setDragStartX)}
-      onMouseMove={(e) => onMouseMove(e, setDragStartX, dragStartX, offset, props.setOffset)}
-      onMouseUp={(e) => onMouseUp(e, setDragStartX)}
+      onMouseDown={(e) => onPanStart(e, setDragStartX)}
+      onMouseMove={(e) => onPanMove(e, setDragStartX, dragStartX, offset, props.setOffset)}
+      onMouseUp={(e) => onPanEnd(e, setDragStartX)}
+      onTouchStart={(e) => onPanStart(e, setDragStartX)}
+      onTouchMove={(e) => onPanMove(e, setDragStartX, dragStartX, offset, props.setOffset)}
+      onTouchEnd={(e) => onPanEnd(e, setDragStartX)}
     >
       {hours.map((hour, i) => {
         const shiftedHour = (hour - wholeOffset + 24) % 24

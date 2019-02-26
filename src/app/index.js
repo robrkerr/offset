@@ -14,9 +14,9 @@ const getTime = (time, myOffset) => {
 const App = () => {
   // set up url state
   const [ urlState, setUrlState ] = useUrlState({})
-  const themOffset = urlState.themOffset || defaultOffset
+  const themOffset = Number(urlState.themOffset) || defaultOffset
   const setThemOffset = (offset) => (offset !== undefined) && setUrlState({ ...urlState, themOffset: offset })
-  const meOffset = urlState.meOffset || defaultOffset
+  const meOffset = Number(urlState.meOffset) || defaultOffset
   const setMeOffset = (offset) => (offset !== undefined) && setUrlState({ ...urlState, meOffset: offset })
   const themName = urlState.themName || 'them'
   const setThemName = (name) => (name !== undefined) && setUrlState({ ...urlState, themName: name })

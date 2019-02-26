@@ -154,7 +154,7 @@ const Main = (props) => {
         <TwitterLink href="https://twitter.com/robrkerr" target="_blank">
           <FontAwesomeIcon icon={faTwitter} />
         </TwitterLink>
-        <GithubLink href="https://twitter.com/robrkerr" target="_blank">
+        <GithubLink href="https://github.com/robrkerr/offset" target="_blank">
           <FontAwesomeIcon icon={faGithub} />
         </GithubLink>
       </Links>

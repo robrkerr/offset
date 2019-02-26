@@ -4,7 +4,9 @@ export const useInterval = (callback, delay) => {
   const savedCallback = useRef()
 
   // Remember the latest callback.
-  useEffect(() => savedCallback.current = callback)
+  useEffect(() => {
+    savedCallback.current = callback
+  })
 
   // Set up the interval.
   useEffect(() => {

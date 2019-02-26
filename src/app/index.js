@@ -14,9 +14,9 @@ const getTime = (time, myOffset) => {
 const App = () => {
   // set up url state
   const [ urlState, setUrlState ] = useUrlState({})
-  const themOffset = Number(urlState.themOffset) || defaultOffset
+  const themOffset = (urlState.themOffset !== undefined) ? Number(urlState.themOffset) : defaultOffset
   const setThemOffset = (offset) => (offset !== undefined) && setUrlState({ ...urlState, themOffset: offset })
-  const meOffset = Number(urlState.meOffset) || defaultOffset
+  const meOffset = (urlState.meOffset !== undefined) ? Number(urlState.meOffset) : defaultOffset
   const setMeOffset = (offset) => (offset !== undefined) && setUrlState({ ...urlState, meOffset: offset })
   const themName = urlState.themName || 'them'
   const setThemName = (name) => (name !== undefined) && setUrlState({ ...urlState, themName: name })
@@ -24,7 +24,8 @@ const App = () => {
   const setMeName = (name) => (name !== undefined) && setUrlState({ ...urlState, meName: name })
   // update the time every 5mins
   const [ currentTime, setCurrentTime ] = useState(new Date())
-  useInterval(() => setCurrentTime(new Date()), 5 * 60 * 1000)
+  const setCurrentTimeAsNow = () => setCurrentTime(new Date())
+  useInterval(() => setCurrentTimeAsNow(), 5 * 60 * 1000)
   // 
   const switchPerspectives = () => {
     setUrlState({

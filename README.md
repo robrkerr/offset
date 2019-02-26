@@ -17,7 +17,7 @@ Soon:
 - [ ] Allow other hour configurations: day-light, awake, after-work
 - [ ] Allow editing of office hours
 - [x] Make styling mobile-friendly
-- [ ] Explore performance issue (CPU usage)
+- [x] Explore performance issue (CPU usage)
 
 Later:
 - [ ] Explore a vertical, mobile-friendly version

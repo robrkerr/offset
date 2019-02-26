@@ -7,15 +7,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Development plans
 
 Soon:
-- [ ] Publish to Github repo and link from main app
 - [x] Make work with fractions of hours as offsets
 - [x] Add button to flip me/them
 - [x] Add interval to keep time updated
 - [x] Make tooltips/modals look nicer
 - [x] Make styling mobile-friendly
+- [x] Publish to Github repo and link from main app
 - [ ] Allow other hour configurations: day-light, awake, after-work
 - [ ] Allow editing of office hours
-- [ ] Add Typescript
+- [ ] Add/use Typescript
 
 Later:
 - [ ] Explore a vertical, mobile-friendly version

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { colours } from '../../utils/styles'
 
@@ -56,15 +56,30 @@ const formatHour = (hour) => {
   return {}
 }
 
+const clickStart = (_, setClickStartTime) => setClickStartTime(new Date())
+const clickEnd = (_, setClickStartTime, onClick, clickStartTime) => {
+  if (((new Date()) - clickStartTime) < 100) {
+    onClick()
+  }
+  setClickStartTime(undefined)
+}
+
 const Hour = (props) => {
   const { number: hourNumber, suffix: hourSuffix } = formatHour(props.hour)
+  const [ clickStartTime, setClickStartTime ] = useState(undefined)
   return (
     <Container opacity={props.opacity} adjustment={props.adjustment}>
       <TextContainer minor={(props.hour % 3) !== 0}>
         <TextNumber>{hourNumber}</TextNumber>
         <TextSuffix>{hourSuffix}</TextSuffix>
       </TextContainer>
-      <Box opacity={props.opacity} onClick={() => props.toggle()}></Box>
+      <Box
+        opacity={props.opacity}
+        onMouseDown={(e) => clickStart(e, setClickStartTime)}
+        onMouseUp={(e) => clickEnd(e, setClickStartTime, props.toggle, clickStartTime)}
+        onTouchStart={(e) => clickStart(e, setClickStartTime)}
+        onTouchEnd={(e) => clickEnd(e, setClickStartTime, props.toggle, clickStartTime)}
+      />
     </Container>
   )
 }

@@ -52,6 +52,7 @@ const Timeline = (props) => {
       onMouseDown={(e) => onPanStart(e, setDragStartX)}
       onMouseMove={(e) => onPanMove(e, setDragStartX, dragStartX, offset, props.setOffset)}
       onMouseUp={(e) => onPanEnd(e, setDragStartX)}
+      onMouseLeave={(e) => onPanEnd(e, setDragStartX)}
       onTouchStart={(e) => onPanStart(e, setDragStartX)}
       onTouchMove={(e) => onPanMove(e, setDragStartX, dragStartX, offset, props.setOffset)}
       onTouchEnd={(e) => onPanEnd(e, setDragStartX)}

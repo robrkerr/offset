@@ -58,7 +58,7 @@ const formatHour = (hour) => {
 
 const clickStart = (_, setClickStartTime) => setClickStartTime(new Date())
 const clickEnd = (_, setClickStartTime, onClick, clickStartTime) => {
-  if (((new Date()) - clickStartTime) < 100) {
+  if (((new Date()) - clickStartTime) < 300) {
     onClick()
   }
   setClickStartTime(undefined)

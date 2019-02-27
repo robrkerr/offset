@@ -40,6 +40,13 @@ const Timeline = (props) => {
   const wholeOffset = Math.ceil(offset)
   const fractionOffset = offset - wholeOffset
   const [ dragStartX, setDragStartX ] = useState(undefined)
+  const toggleHour = (hour) => {
+    const toggleOn = props.availableHours[hour] === '0'
+    const newAvailableHours = props.availableHours.slice(0, hour)
+      + (toggleOn ? "1" : "0")
+      + props.availableHours.slice(hour + 1)
+    props.setAvailableHours(newAvailableHours)
+  }
   return (
     <Container adjustable={!!props.setOffset}
       onMouseDown={(e) => onPanStart(e, setDragStartX)}
@@ -55,14 +62,16 @@ const Timeline = (props) => {
           <Hour
             key={shiftedHour}
             hour={((i === 0) && (fractionOffset !== 0)) ? undefined : shiftedHour}
-            opacity={props.officeHours[shiftedHour] ? 0.8 : 0.4}
+            opacity={(props.availableHours[shiftedHour] === '1') ? 0.8 : 0.4}
+            toggle={() => toggleHour(shiftedHour)}
             adjustment={fractionOffset}
           />
         )
       })}
       {(fractionOffset !== 0) && (
         <Hour
-          opacity={props.officeHours[(hours[0] - wholeOffset + 24) % 24] ? 0.8 : 0.4}
+          opacity={(props.availableHours[(hours[0] - wholeOffset + 24) % 24] === '1') ? 0.8 : 0.4}
+          toggle={() => toggleHour((hours[0] - wholeOffset + 24) % 24)}
           adjustment={fractionOffset}
         />
       )}

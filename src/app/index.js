@@ -5,7 +5,7 @@ import { hours } from '../utils/hours'
 import { useInterval } from '../utils/hooks'
 
 const defaultOffset = -(new Date()).getTimezoneOffset() / 60
-const defaultOfficeHours = hours.map((hour) => hour >= 9 && hour < 17)
+const defaultAvailableHours = hours.map((hour) => (hour >= 9 && hour < 17) ? 1 : 0).join('')
 
 const getTime = (time, myOffset) => {
   return time.getHours() + (myOffset - defaultOffset) + time.getMinutes() / 60
@@ -22,6 +22,10 @@ const App = () => {
   const setThemName = (name) => (name !== undefined) && setUrlState({ ...urlState, themName: name })
   const meName = urlState.meName || 'me'
   const setMeName = (name) => (name !== undefined) && setUrlState({ ...urlState, meName: name })
+  const themAvailableHours = urlState.themAvailableHours || defaultAvailableHours
+  const setThemAvailableHours = (hours) => (hours !== undefined) && setUrlState({ ...urlState, themAvailableHours: hours })
+  const meAvailableHours = urlState.meAvailableHours || defaultAvailableHours
+  const setMeAvailableHours = (hours) => (hours !== undefined) && setUrlState({ ...urlState, meAvailableHours: hours })
   // update the time every 5mins
   const [ currentTime, setCurrentTime ] = useState(new Date())
   const setCurrentTimeAsNow = () => setCurrentTime(new Date())
@@ -29,10 +33,12 @@ const App = () => {
   // 
   const switchPerspectives = () => {
     setUrlState({
-      themOffset: meOffset,
-      meOffset: themOffset,
-      themName: meName,
-      meName: themName,
+      themOffset: urlState.meOffset,
+      meOffset: urlState.themOffset,
+      themName: urlState.meName,
+      meName: urlState.themName,
+      meAvailableHours: urlState.themAvailableHours,
+      themAvailableHours: urlState.meAvailableHours,
     })
   }
   //
@@ -42,16 +48,18 @@ const App = () => {
     them: {
       name: themName,
       utcOffset: themOffset,
+      availableHours: themAvailableHours,
       setName: setThemName,
       setUtcOffset: setThemOffset,
-      officeHours: defaultOfficeHours,
+      setAvailableHours: setThemAvailableHours,
     },
     me: {
       name: meName,
       utcOffset: meOffset,
+      availableHours: meAvailableHours,
       setName: setMeName,
       setUtcOffset: setMeOffset,
-      officeHours: defaultOfficeHours,
+      setAvailableHours: setMeAvailableHours,
     }
   }
   return <Main {...mainProps} />

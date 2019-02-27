@@ -117,12 +117,13 @@ const Main = (props) => {
           />
         )}
         <Timeline
-          officeHours={props.them.officeHours}
           offset={props.me.utcOffset - props.them.utcOffset}
           setOffset={(offsetDiff) => {
             const newOffset = normaliseOffset(props.me.utcOffset - offsetDiff)
             props.them.setUtcOffset(newOffset)
           }}
+          availableHours={props.them.availableHours}
+          setAvailableHours={props.them.setAvailableHours}
         />
         <SwitchContainer>
           <FontAwesomeIcon
@@ -147,7 +148,8 @@ const Main = (props) => {
           />
         )}
         <Timeline
-          officeHours={props.me.officeHours}
+          availableHours={props.me.availableHours}
+          setAvailableHours={props.me.setAvailableHours}
         />
       </ContainerInner>
       <Links>

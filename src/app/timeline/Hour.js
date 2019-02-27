@@ -7,6 +7,11 @@ const Box = styled.div`
   height: calc(100% - 1rem);
   opacity: ${(props) => props.opacity || 1};
   background: ${(props) => props.colour || colours.primary};
+  cursor: pointer;
+
+  &:hover {
+    opacity: ${(props) => Math.min(props.opacity + 0.1) || 1};
+  }
 `
 
 const TextContainer = styled.div`
@@ -59,7 +64,7 @@ const Hour = (props) => {
         <TextNumber>{hourNumber}</TextNumber>
         <TextSuffix>{hourSuffix}</TextSuffix>
       </TextContainer>
-      <Box opacity={props.opacity}></Box>
+      <Box opacity={props.opacity} onClick={() => props.toggle()}></Box>
     </Container>
   )
 }

@@ -44,14 +44,14 @@ const Container = styled.div`
 `
 
 const formatHour = (hour) => {
-  if (hour === 0) {
+  if (hour > 12) {
+    return { number: `${hour - 12}`, suffix: 'PM' }
+  } else if (hour < 12 && hour > 0) {
+    return { number: `${hour}`, suffix: 'AM' }
+  } else if (hour === 0) {
     return { number: '12', suffix: 'AM' }
   } else if (hour === 12) {
     return { number: '12', suffix: 'PM' }
-  } else if (hour > 12) {
-    return { number: `${hour - 12}`, suffix: 'PM' }
-  } else if (hour < 12) {
-    return { number: `${hour}`, suffix: 'AM' }
   }
   return {}
 }

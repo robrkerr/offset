@@ -13,7 +13,6 @@ export const normaliseOffset = (offset) => {
 
 export const getOffsetText = (offset) => {
   if (typeof offset !== 'number') {
-    console.log({ offset })
     return ''
   } else if (offset < 0) {
     return `-${getOffsetText(-offset).slice(1)}`

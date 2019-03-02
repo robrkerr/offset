@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Hour from './Hour'
 import { hours } from '../../utils/hours'
+import { useDragState } from '../../utils/hooks'
 
 export const Container = styled.div`
   display: flex;
@@ -19,27 +20,11 @@ export const Container = styled.div`
   }
 `
 
-const getDragPosX = (evt) => {
-  const xPos = evt.clientX || evt.touches[0].clientX
-  const elementRect = evt.currentTarget.getBoundingClientRect()
-  return (xPos - elementRect.x) / elementRect.width
-}
-
-const onPanStart = (evt, setPosX) => setPosX(getDragPosX(evt))
-const onPanEnd = (_, setPosX) => setPosX(undefined)
-const onPanMove = (evt, setDragStartX, startPosX, offset, setOffset) => {
-  if (!setOffset || (startPosX === undefined)) { return }
-  const hoursToShift = Math.round(4 * 24 * (getDragPosX(evt) - startPosX)) / 4
-  if (hoursToShift === 0) { return }
-  setOffset(offset + hoursToShift)
-  setDragStartX(startPosX + hoursToShift / 24)
-}
-
 const Timeline = (props) => {
   const offset = props.offset || 0
   const wholeOffset = Math.ceil(offset)
   const fractionOffset = offset - wholeOffset
-  const [ dragStartX, setDragStartX ] = useState(undefined)
+  const dragHandlers = useDragState((shift) => props.setOffset(offset + shift))
   const toggleHour = (hour) => {
     const toggleOn = props.availableHours[hour] === '0'
     const newAvailableHours = props.availableHours.slice(0, hour)
@@ -48,15 +33,7 @@ const Timeline = (props) => {
     props.setAvailableHours(newAvailableHours)
   }
   return (
-    <Container adjustable={!!props.setOffset}
-      onMouseDown={(e) => onPanStart(e, setDragStartX)}
-      onMouseMove={(e) => onPanMove(e, setDragStartX, dragStartX, offset, props.setOffset)}
-      onMouseUp={(e) => onPanEnd(e, setDragStartX)}
-      onMouseLeave={(e) => onPanEnd(e, setDragStartX)}
-      onTouchStart={(e) => onPanStart(e, setDragStartX)}
-      onTouchMove={(e) => onPanMove(e, setDragStartX, dragStartX, offset, props.setOffset)}
-      onTouchEnd={(e) => onPanEnd(e, setDragStartX)}
-    >
+    <Container adjustable={!!props.setOffset} {...dragHandlers}>
       {hours.map((hour, i) => {
         const shiftedHour = (hour - wholeOffset + 24) % 24
         return (

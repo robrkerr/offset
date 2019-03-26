@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import PartyModal from './PartyModal'
 import { getOffsetText } from '../../utils/hours'
 
 const Container = styled.div`
@@ -16,10 +17,21 @@ const Timezone = styled.div`
 `
 
 const Party = (props) => (
-  <Container onClick={props.onClick}>
-    <Heading>{props.name}</Heading>
-    <Timezone>{getOffsetText(props.offset)}</Timezone>
-  </Container>
+  <React.Fragment>
+    <Container onClick={props.onToggleModal}>
+      <Heading>{props.name}</Heading>
+      <Timezone>{getOffsetText(props.offset)}</Timezone>
+    </Container>
+    {props.modalOpen && (
+      <PartyModal
+        name={props.name}
+        offset={props.offset}
+        onEditName={props.onEditName}
+        onEditOffset={props.onEditOffset}
+        onToggleModal={props.onToggleModal}
+      />
+    )}
+  </React.Fragment>
 )
 
 export default Party

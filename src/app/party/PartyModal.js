@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { colours } from '../../utils/styles'
 
@@ -8,7 +8,7 @@ const OuterContainer = styled.div`
   width: 100%;
 `
 
-const Container = styled.div`
+const Container = styled.form`
   position: absolute;
   top: 20px;
   left: calc(50% - 125px);
@@ -75,27 +75,47 @@ const TooltipBacking = styled.div`
   left: calc(50% - 11px);
 `
 
+const HiddenSubmit = styled.input.attrs({
+  type: 'submit',
+})`
+  display: none;
+`
+
 const PartyModal = (props) => {
   const [ offsetText, setOffsetText ] = useState(props.offset)
-  const updateOffsetText = (text) => {
-    if (text !== '') {
-      props.onEditOffset(text)
+  const [ nameText, setNameText ] = useState(props.name)
+  const onSubmit = (evt) => {
+    evt.preventDefault()
+    if (nameInput.current === document.activeElement) {
+      props.onEditName(nameText)
+    } else if (offsetInput.current === document.activeElement) {
+      props.onEditOffset(offsetText)
     }
-    setOffsetText(text)
+    props.onToggleModal()
   }
+  const nameInput = useRef(null)
+  const offsetInput = useRef(null)
+  useEffect(() => {
+    nameInput.current.focus()
+  }, [])
   return (
     <OuterContainer onClick={(e) => e.stopPropagation()}>
-      <Container>
+      <Container onSubmit={onSubmit}>
         <TooltipBacking />
         <Tooltip />
         <Name
-          value={props.name}
-          onChange={(e) => props.onEditName(e.target.value)}
+          value={nameText}
+          ref={nameInput}
+          onChange={(e) => setNameText(e.target.value)}
+          onBlur={(e) => props.onEditName(e.target.value)}
         />
         <Timezone
           value={offsetText}
-          onChange={(e) => updateOffsetText(e.target.value)}
+          ref={offsetInput}
+          onChange={(e) => setOffsetText(e.target.value)}
+          onBlur={(e) => props.onEditOffset(e.target.value)}
         />
+        <HiddenSubmit />
       </Container>
     </OuterContainer>
   )

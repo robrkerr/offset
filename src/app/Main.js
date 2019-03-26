@@ -5,7 +5,6 @@ import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons'
 import Timeline, { Container as TimelineContainer } from './timeline/Timeline'
 import Party from './party/Party'
-import PartyModal from './party/PartyModal'
 import { normaliseOffset } from '../utils/hours'
 import { colours } from '../utils/styles'
 
@@ -94,7 +93,7 @@ const TwitterLink = styled.a`
 const Main = (props) => {
   const [ modalOpen, setOpenModal ] = useState(undefined)
   const toggleModal = (type) => (evt) => {
-    evt.stopPropagation()
+    if (evt) { evt.stopPropagation() }
     return (modalOpen === type) ? setOpenModal(undefined) : setOpenModal(type)
   }
   return (
@@ -104,18 +103,13 @@ const Main = (props) => {
         <Party
           name={props.them.name}
           offset={props.them.utcOffset}
-          onClick={toggleModal('them')}
+          modalOpen={modalOpen === 'them'}
+          onToggleModal={toggleModal('them')}
+          onEditName={(name) => props.them.setName(name)}
+          onEditOffset={(offset) => {
+            props.them.setUtcOffset(normaliseOffset(offset))
+          }}
         />
-        {(modalOpen === 'them') && (
-          <PartyModal
-            name={props.them.name}
-            offset={props.them.utcOffset}
-            onEditName={(name) => props.them.setName(name)}
-            onEditOffset={(offset) => {
-              props.them.setUtcOffset(normaliseOffset(offset))
-            }}
-          />
-        )}
         <Timeline
           offset={props.me.utcOffset - props.them.utcOffset}
           setOffset={(offsetDiff) => {
@@ -135,18 +129,13 @@ const Main = (props) => {
         <Party
           name={props.me.name}
           offset={props.me.utcOffset}
-          onClick={toggleModal('me')}
+          modalOpen={modalOpen === 'me'}
+          onToggleModal={toggleModal('me')}
+          onEditName={(name) => props.me.setName(name)}
+          onEditOffset={(offset) => {
+            props.me.setUtcOffset(normaliseOffset(offset))
+          }}
         />
-        {(modalOpen === 'me') && (
-          <PartyModal
-            name={props.me.name}
-            offset={props.me.utcOffset}
-            onEditName={(name) => props.me.setName(name)}
-            onEditOffset={(offset) => {
-              props.me.setUtcOffset(normaliseOffset(offset))
-            }}
-          />
-        )}
         <Timeline
           availableHours={props.me.availableHours}
           setAvailableHours={props.me.setAvailableHours}

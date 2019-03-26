@@ -10,7 +10,7 @@ import { colours } from '../utils/styles'
 
 const ContainerOuter = styled.div`
   text-align: center;
-  height: 100vh;
+  height: 100%;
   color: ${colours.light};
   width: 100%;
   overflow: visible;

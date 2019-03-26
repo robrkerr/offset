@@ -61,7 +61,6 @@ const clickStart = (e, {
   clickEndTime,
   setClickStartTime,
 }) => {
-  e.stopPropagation()
   const timeNow = Date.now()
   const canStartClick = (clickStartTime === undefined)
     && ((clickEndTime === undefined) || (timeNow - clickEndTime) > 300)
@@ -75,7 +74,6 @@ const clickEnd = (e, {
   setClickStartTime,
   setClickEndTime,
 }, onClick) => {
-  e.stopPropagation()
   const timeNow = Date.now()
   const canEndClick = (clickStartTime !== undefined)
     && ((timeNow - clickStartTime) < 600)

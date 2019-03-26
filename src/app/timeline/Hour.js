@@ -56,17 +56,40 @@ const formatHour = (hour) => {
   return {}
 }
 
-const clickStart = (_, setClickStartTime) => setClickStartTime(new Date())
-const clickEnd = (_, setClickStartTime, onClick, clickStartTime) => {
-  if (((new Date()) - clickStartTime) < 300) {
+const clickStart = (e, {
+  clickStartTime,
+  clickEndTime,
+  setClickStartTime,
+}) => {
+  e.stopPropagation()
+  const timeNow = Date.now()
+  const canStartClick = (clickStartTime === undefined)
+    && ((clickEndTime === undefined) || (timeNow - clickEndTime) > 300)
+  if (canStartClick) {
+    setClickStartTime(timeNow)
+  }
+}
+
+const clickEnd = (e, {
+  clickStartTime,
+  setClickStartTime,
+  setClickEndTime,
+}, onClick) => {
+  e.stopPropagation()
+  const timeNow = Date.now()
+  const canEndClick = (clickStartTime !== undefined)
+    && ((timeNow - clickStartTime) < 600)
+  if (canEndClick) {
     onClick()
   }
   setClickStartTime(undefined)
+  setClickEndTime(timeNow)
 }
 
 const Hour = (props) => {
   const { number: hourNumber, suffix: hourSuffix } = formatHour(props.hour)
   const [ clickStartTime, setClickStartTime ] = useState(undefined)
+  const [ clickEndTime, setClickEndTime ] = useState(undefined)
   return (
     <Container opacity={props.opacity} adjustment={props.adjustment}>
       <TextContainer minor={(props.hour % 3) !== 0}>
@@ -75,10 +98,30 @@ const Hour = (props) => {
       </TextContainer>
       <Box
         opacity={props.opacity}
-        onMouseDown={(e) => clickStart(e, setClickStartTime)}
-        onMouseUp={(e) => clickEnd(e, setClickStartTime, props.toggle, clickStartTime)}
-        onTouchStart={(e) => clickStart(e, setClickStartTime)}
-        onTouchEnd={(e) => clickEnd(e, setClickStartTime, props.toggle, clickStartTime)}
+        onMouseDown={(e) => clickStart(e, {
+          clickStartTime,
+          clickEndTime,
+          setClickStartTime,
+          setClickEndTime,
+        })}
+        onMouseUp={(e) => clickEnd(e, {
+          clickStartTime,
+          clickEndTime,
+          setClickStartTime,
+          setClickEndTime,
+        }, props.toggle)}
+        onTouchStart={(e) => clickStart(e, {
+          clickStartTime,
+          clickEndTime,
+          setClickStartTime,
+          setClickEndTime,
+        })}
+        onTouchEnd={(e) => clickEnd(e, {
+          clickStartTime,
+          clickEndTime,
+          setClickStartTime,
+          setClickEndTime,
+        }, props.toggle)}
       />
     </Container>
   )
